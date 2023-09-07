@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sudoku Solver</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Add your CSS for styling the Sudoku grid here */
+        table {
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+    
+        td {
+            width: 80px; /* Adjust the width to control the size of each cell */
+            height: 80px; /* Adjust the height to match the width for square cells */
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid #000;
+            font-size: 36px; /* Adjust font size for cell content */
+        }
+    
+        input {
+            width: 60px;
+            height: 60px;
+            text-align: center;
+            vertical-align: middle;
+            border: none;
+            font-size: 36px; /* Adjust font size for cell content */
+        }
+
+        /* Add thicker borders to the 3x3 squares */
+        tr:nth-child(3n+1) td {
+            border-top: 5px solid #000;
+        }
+
+        tr:nth-child(3n) td {
+            border-bottom: 5px solid #000;
+        }
+    
+        td:nth-child(3n+1) {
+            border-left: 5px solid #000;
+        }
+
+        td:nth-child(3n+3) {
+            border-right: 5px solid #000;
+        }
+        
+        .invalid {
+            background-color: red;
+  }
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+        -webkit-appearance: none; 
+        }
+
+        .completed-puzzle {
+            background-color: yellow;
+        }
+    </style>
+    <script src="js/script.js"></script>
+</head>
+<body>
+    <div class="container text-center mt-5">
+        <h1>Sudoku oplossen</h1>
+        <div class="mb-3">
+            <a href="#" class="btn btn-primary" data-toggle="collapse" data-target="#explanation">
+                uitleg
+            </a>
+        </div>
+
+        <!-- Collapsible content -->
+        <div id="explanation" class="collapse">
+            Voer de nummers van een eigen sudoku in en klik op los op. De sudoku wordt dan opgelost.<br />
+            Je kunt ook een van de 84 puzzels kiezen door op het nummer te klikken.
+        </div>
+        <div class="row justify-content-center mt-4">
+            <table id="sudoku">
+                <!-- Create a 9x9 Sudoku grid using HTML tables -->
+            </table>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <button class="btn btn-primary mt-3" onclick="clearSudoku()">Leegmaken</button><br />
+            <button class="btn btn-primary mt-3" onclick="generateSudokuPuzzle(generateRandomNumber(106,156))">Makkelijk</button><br />
+            <button class="btn btn-primary mt-3" onclick="generateSudokuPuzzle(generateRandomNumber(156,206))">Medium</button><br />
+            <button class="btn btn-primary mt-3" onclick="generateSudokuPuzzle(generateRandomNumber(1,106))">Moeilijk</button><br />
+            <button class="btn btn-primary mt-3" onclick="solveSudoku()">Los op!</button><br /><br />
+        </div>
+
+        <!-- Hier beginnen de rijen voor de links -->
+        <div class="row justify-content-center"><h1>Puzzels</h1></div>
+        <div class="row" id="puzzleLinks">
+            <!-- Links worden hier gegenereerd door JavaScript -->
+        </div>
+    </div>
+    <script>
+        // JavaScript code to generate links for all 84 puzzles
+        document.addEventListener("DOMContentLoaded", function() {
+            var puzzleLinksContainer = document.getElementById("puzzleLinks");
+
+            for (var i = 1; i <= puzzles.length-1; i++) {
+                var colDiv = document.createElement("div");
+                colDiv.classList.add("col-md-1");
+
+                var puzzleLink = document.createElement("a");
+                puzzleLink.textContent = i;
+                puzzleLink.href = "#"; // You can set the actual link destination here
+                puzzleLink.onclick = generateSudokuPuzzle.bind(null, i);
+
+                colDiv.appendChild(puzzleLink);
+                puzzleLinksContainer.appendChild(colDiv);
+            }
+        });
+
+        generateSudokuPuzzle(generateRandomNumber(1,106)); // Generate a random puzzle
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

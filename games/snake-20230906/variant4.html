@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="snakeCanvas" width="400" height="400"></canvas>
+
+    <script>
+        const canvas = document.getElementById("snakeCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const gridSize = 20;
+        let snake = [{ x: 5, y: 5 }];
+        let direction = "right";
+        let food = { x: Math.floor(Math.random() * (canvas.width / gridSize)) * gridSize, y: Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize };
+
+        function drawSnake() {
+            ctx.fillStyle = "green";
+            snake.forEach(segment => {
+                ctx.fillRect(segment.x, segment.y, gridSize, gridSize);
+            });
+        }
+
+        function drawFood() {
+            ctx.fillStyle = "red";
+            ctx.fillRect(food.x, food.y, gridSize, gridSize);
+        }
+
+        function moveSnake() {
+            let headX = snake[0].x;
+            let headY = snake[0].y;
+
+            if (direction === "right") headX += gridSize;
+            if (direction === "left") headX -= gridSize;
+            if (direction === "up") headY -= gridSize;
+            if (direction === "down") headY += gridSize;
+
+            let newHead = { x: headX, y: headY };
+            snake.unshift(newHead);
+
+            if (headX === food.x && headY === food.y) {
+                food = { x: Math.floor(Math.random() * (canvas.width / gridSize)) * gridSize, y: Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize };
+            } else {
+                snake.pop();
+            }
+        }
+
+        function checkCollision() {
+            let headX = snake[0].x;
+            let headY = snake[0].y;
+
+            if (headX < 0 || headX >= canvas.width || headY < 0 || headY >= canvas.height) {
+                clearInterval(gameInterval);
+                alert("Game over!");
+            }
+
+            // Controleer of de slang het fruit heeft bereikt
+            if (Math.abs(headX - food.x) < gridSize && Math.abs(headY - food.y) < gridSize) {
+                // Voeg een nieuw segment toe aan de slang
+                snake.unshift({ x: food.x, y: food.y });
+                // Genereer nieuw voedsel
+                food = { x: Math.floor(Math.random() * (canvas.width / gridSize)) * gridSize, y: Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize };
+            } else {
+                // Verplaats de slang door elk segment te verschuiven
+                for (let i = snake.length - 1; i > 0; i--) {
+                    snake[i] = { ...snake[i - 1] };
+                }
+            }
+
+            // Controleer op botsing met zichzelf
+            for (let i = 1; i < snake.length; i++) {
+                if (headX === snake[i].x && headY === snake[i].y) {
+                    clearInterval(gameInterval);
+                    alert("Game over!");
+                }
+            }
+        }
+
+
+
+
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawSnake();
+            drawFood();
+            moveSnake();
+            checkCollision();
+        }
+
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "ArrowRight" && direction !== "left") direction = "right";
+            if (event.key === "ArrowLeft" && direction !== "right") direction = "left";
+            if (event.key === "ArrowUp" && direction !== "down") direction = "up";
+            if (event.key === "ArrowDown" && direction !== "up") direction = "down";
+        });
+
+        const gameInterval = setInterval(gameLoop, 100);
+
+    </script>
+</body>
+</html>
+
+
+
+

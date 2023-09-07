@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sliding Background Image Navigation</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <div id="container">
+        <div id="navigation-bar">
+            <h1>Wijnand Baretta</h1>
+            <div id="word-container"></div>
+            <nav id="menu-items">
+                <ul>
+                    <li><a href="#" onclick="transitionToSplash()">Home</a></li>
+                    <li><a href="#" onclick="transitionToNavBar()">About</a></li>
+                    <li><a href="#" onclick="transitionToNavBar()">Projects</a></li>
+                    <li><a href="#" onclick="transitionToNavBar()">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Wrap your code in the DOMContentLoaded event listener
+        document.addEventListener('DOMContentLoaded', function() {
+        const wordList = ['Ondernemer', 'Programmeur', 'Echtgenoot', 'Vader', 'Nieuwsgierig? Bel me.'];
+        typeWords(wordList);
+        });
+    </script>
+</body>
+</html>
+

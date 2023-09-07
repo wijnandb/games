@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boter-Kaas-en-Eieren</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 10px;
+            margin: 20px auto;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            text-align: center;
+            font-size: 36px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+        .cell:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Boter-Kaas-en-Eieren</h1>
+    <div id="message"></div>
+    <div class="board" id="board"></div>
+    <button id="computerMoveButton">Laat de computer zetten</button>
+    <script>
+        const board = document.getElementById("board");
+        const message = document.getElementById("message");
+        const computerMoveButton = document.getElementById("computerMoveButton");
+        let currentPlayer = "X";
+        let gameOver = false;
+
+        // Maak een array om de speltoestand bij te houden
+        const gameState = ["", "", "", "", "", "", "", "", ""];
+
+        // Definieer winnende combinaties
+        const winningCombinations = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6],
+        ];
+
+        // Voeg cellen toe aan het speelbord
+        for (let i = 0; i < 9; i++) {
+            const cell = document.createElement("div");
+            cell.classList.add("cell");
+            cell.addEventListener("click", () => makeMove(i));
+            board.appendChild(cell);
+        }
+
+        // Functie om een zet te maken
+        function makeMove(index) {
+            if (gameOver || gameState[index] !== "") return;
+
+            gameState[index] = currentPlayer;
+            board.children[index].textContent = currentPlayer;
+
+            if (checkWin(currentPlayer)) {
+                message.textContent = `${currentPlayer} wint!`;
+                gameOver = true;
+            } else if (gameState.includes("")) {
+                currentPlayer = currentPlayer === "X" ? "O" : "X";
+                message.textContent = `Het is de beurt aan ${currentPlayer}`;
+            } else {
+                message.textContent = "Gelijkspel!";
+                gameOver = true;
+            }
+        }
+
+        // Functie om te controleren of een speler heeft gewonnen
+        function checkWin(player) {
+            for (const combination of winningCombinations) {
+                const [a, b, c] = combination;
+                if (gameState[a] === player && gameState[b] === player && gameState[c] === player) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Functie voor de zet van de computer
+        function computerMove() {
+            if (gameOver) return;
+
+            // Simpel algoritme: kies willekeurig een lege cel
+            const emptyCells = gameState.reduce((acc, val, index) => {
+                if (val === "") {
+                    acc.push(index);
+                }
+                return acc;
+            }, []);
+
+            if (emptyCells.length > 0) {
+                const randomIndex = Math.floor(Math.random() * emptyCells.length);
+                const computerIndex = emptyCells[randomIndex];
+                makeMove(computerIndex);
+            }
+        }
+
+        // Voeg een eventlistener toe aan de knop om de computer te laten zetten
+        computerMoveButton.addEventListener("click", computerMove);
+    </script>
+</body>
+</html>

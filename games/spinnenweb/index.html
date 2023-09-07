@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spinnenweb</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #web-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background-color: black;
+        }
+
+        .web {
+            position: absolute;
+            border: 1px solid white;
+        }
+
+        #spider {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div id="web-container"></div>
+    <div id="spider"></div>
+
+    <script>
+        const webContainer = document.getElementById('web-container');
+        const spider = document.getElementById('spider');
+
+        // Maak het spinnenweb
+        const numLines = 8;
+        for (let i = 0; i < numLines; i++) {
+            const web = document.createElement('div');
+            web.className = 'web';
+            const angle = (360 / numLines) * i;
+            const radius = 100; // Straal van het spinnenweb
+            const x = webContainer.offsetWidth / 2 + radius * Math.cos((angle * Math.PI) / 180);
+            const y = webContainer.offsetHeight / 2 + radius * Math.sin((angle * Math.PI) / 180);
+            web.style.left = `${x}px`;
+            web.style.top = `${y}px`;
+            web.style.width = '1px'; // Dikte van de spinnenweblijnen
+            web.style.height = `${Math.sqrt(Math.pow(x - webContainer.offsetWidth / 2, 2) + Math.pow(y - webContainer.offsetHeight / 2, 2)) * 2}px`;
+            web.style.transformOrigin = '0 0';
+            web.style.transform = `rotate(${angle}deg)`;
+            webContainer.appendChild(web);
+        }
+
+        // Plaats de spin in het midden
+        spider.style.left = `${webContainer.offsetWidth / 2 - spider.offsetWidth / 2}px`;
+        spider.style.top = `${webContainer.offsetHeight / 2 - spider.offsetHeight / 2}px`;
+    </script>
+</body>
+</html>
